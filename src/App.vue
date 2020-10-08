@@ -65,24 +65,19 @@ export default {
     calculate(type) {
       const acc = parseInt(this.accumulator);
       const lastest = parseInt(this.lastestValue);
+      this.operation.shift()
       switch (type) {
         case "+":
-          this.operation.shift();
           return acc + lastest;
         case "-":
-          this.operation.shift();
           return acc - lastest;
         case "*":
-          this.operation.shift();
           return acc * lastest;
         case "/":
-          this.operation.shift();
           return acc / lastest;
         case "%":
-          this.operation.shift();
           return acc / 100;
         case "√":
-          this.operation.shift();
            return Math.sqrt(acc)
         default:
           return;
