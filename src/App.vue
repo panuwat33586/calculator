@@ -52,21 +52,9 @@ export default {
       }else if(value == "√"){
         this.specialOpearation(value)
       } else if (this.operation.length == 0) {
-        if (typeof value == "string" && value != ".") {
-          this.operation.push(value);
-          this.showdisplay += value;
-        } else {
-          this.showdisplay += value;
-          this.accumulator += value;
-        }
+        this.setdataValue(value,'accumulator')
       } else if (this.operation.length == 1) {
-        if (typeof value == "string" && value != ".") {
-          this.operation.push(value);
-          this.showdisplay += value;
-        } else {
-          this.showdisplay += value;
-          this.lastestValue += value;
-        }
+        this.setdataValue(value,'lastesValue')
       } else {
         this.showdisplay += value;
         this.accumulator = this.calculate(this.operation[0]);
@@ -102,7 +90,7 @@ export default {
       
     },
     clear(){
-      this.showdisplay = "";
+        this.showdisplay = "";
         this.accumulator = "";
         this.lastestValue = "";
         this.operation = [];
@@ -113,6 +101,19 @@ export default {
         }else{
           this.accumulator = this.calculate(value);
           this.showdisplay = this.accumulator;
+    }
+    },
+     setdataValue(value,targetstate){
+         if (typeof value == "string" && value != ".") {
+          this.operation.push(value);
+          this.showdisplay += value;
+        } else {
+          this.showdisplay += value;
+          if(targetstate=='accumulator'){
+            this.accumulator+= value;
+          }else{
+            this.lastestValue+= value;
+          }
         }
     }
   }
