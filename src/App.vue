@@ -13,7 +13,10 @@
               <Display :showdisplay="showdisplay" />
             </div>
             <div class="numpad">
-              <Numpad @onButtonValue="showValue" />
+              <Numpad 
+              @appendNumber="handleNumber" 
+              @appendOperation="handleOperation"
+              />
             </div>
           </div>
         </div>
@@ -40,27 +43,36 @@ export default {
     Numpad,
   },
   methods: {
-    showValue(value) {
-      if (value == "=") {
-        this.accumulator = this.calculate(this.operation[0]);
+    handleOperation(operation){
+       if(operation=='='){
+       this.accumulator = this.calculate(this.operation[0]);
         this.lastestValue=''
-        this.showdisplay = this.accumulator;
-      } else if (value == "%") {
-        this.specialOpearation(value)
-      } else if (value == "C") {
-        this.clear()
-      }else if(value == "√"){
-        this.specialOpearation(value)
-      } else if (this.operation.length == 0) {
-        this.setdataValue(value,'accumulator')
-      } else if (this.operation.length == 1) {
-        this.setdataValue(value,'lastesValue')
-      } else {
-        this.showdisplay += value;
-        this.accumulator = this.calculate(this.operation[0]);
-        this.lastestValue = "";
-        this.lastestValue += value;
-      }
+        this.showdisplay = `${this.accumulator}`;
+       }else if(operation=='C'){
+         this.clear()
+       }else if(operation=='√'||operation=='%'){
+         this.specialOpearation(operation)
+       }
+       else{
+        if(this.operation.length==0){
+          this.operation.push(operation)
+          this.showdisplay+=operation
+       }else{
+         this.operation.push(operation)
+         this.accumulator=this.calculate(this.operation[0])
+         this.showdisplay+=operation
+         this.lastestValue=''
+       }
+       }
+    },
+    handleNumber(number){
+        if(this.operation.length==0){
+          this.showdisplay+=number
+          this.accumulator+=number
+        }else{
+          this.showdisplay+=number
+          this.lastestValue+=number
+        }
     },
     calculate(type) {
       const acc = parseInt(this.accumulator);
@@ -78,7 +90,7 @@ export default {
         case "%":
           return acc / 100;
         case "√":
-           return Math.sqrt(acc)
+           return  Math.sqrt(acc)
         default:
           return;
       }
@@ -95,21 +107,8 @@ export default {
           this.showdisplay='ERROR'
         }else{
           this.accumulator = this.calculate(value);
-          this.showdisplay = this.accumulator;
+          this.showdisplay = `${this.accumulator}`;
     }
-    },
-     setdataValue(value,targetstate){
-         if (typeof value == "string" && value != ".") {
-          this.operation.push(value);
-          this.showdisplay += value;
-        } else {
-          this.showdisplay += value;
-          if(targetstate=='accumulator'){
-            this.accumulator+= value;
-          }else{
-            this.lastestValue+= value;
-          }
-        }
     }
   }
 };

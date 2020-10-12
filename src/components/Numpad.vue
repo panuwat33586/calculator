@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div
-      v-for="(button, $buttonIndex) of buttons"
+      v-for="({button,append}, $buttonIndex) of buttons"
       :key="$buttonIndex"
       class="col-3"
     >
@@ -9,7 +9,7 @@
         <button
           type="button"
           class="btn btn-lg btn-primary"
-          @click="sendButtonValue(button)"
+          @click="append(button)"
         >
           {{ button }}
         </button>
@@ -24,32 +24,35 @@ export default {
   data() {
     return {
       buttons: [
-        "C",
-        "√",
-        "%",
-        "/",
-        7,
-        8,
-        9,
-        "*",
-        4,
-        5,
-        6,
-        "-",
-        1,
-        2,
-        3,
-        "+",
-        0,
-        ".",
-        "=",
+        {button:"C",append:this.appendOperation},
+        {button:"√",append:this.appendOperation},
+        {button:"%",append:this.appendOperation},
+        {button:"/",append:this.appendOperation},
+        {button:7,append:this.appendNumber},
+        {button:8,append:this.appendNumber},
+        {button:9,append:this.appendNumber},
+        {button:"*",append:this.appendOperation},
+        {button:4,append:this.appendNumber},
+        {button:5,append:this.appendNumber},
+        {button:6,append:this.appendNumber},
+        {button:"-",append:this.appendOperation},
+        {button:1,append:this.appendNumber},
+        {button:2,append:this.appendNumber},
+        {button:3,append:this.appendNumber},
+        {button:"+",append:this.appendOperation},
+        {button:0,append:this.appendNumber},
+        {button:".",append:this.appendOperation},
+        {button:"=",append:this.appendOperation},
       ],
     };
   },
   methods: {
-    sendButtonValue(value) {
-      this.$emit("onButtonValue", value);
+    appendNumber(value) {
+      this.$emit("appendNumber", value);
     },
+    appendOperation(operation){
+      this.$emit("appendOperation",operation)
+    }
   },
 };
 </script>
