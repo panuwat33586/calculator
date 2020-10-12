@@ -44,26 +44,20 @@ export default {
   },
   methods: {
     handleOperation(operation){
-       if(operation=='='){
-       this.accumulator = this.calculate(this.operation[0]);
-        this.lastestValue=''
-        this.showdisplay = `${this.accumulator}`;
-       }else if(operation=='C'){
-         this.clear()
-       }else if(operation=='√'||operation=='%'){
-         this.specialOpearation(operation)
-       }
-       else{
-        if(this.operation.length==0){
-          this.operation.push(operation)
-          this.showdisplay+=operation
-       }else{
-         this.operation.push(operation)
-         this.accumulator=this.calculate(this.operation[0])
-         this.showdisplay+=operation
-         this.lastestValue=''
-       }
-       }
+      switch(operation){
+        case '=':
+          this.equal()
+          break
+        case'C':
+           this.clear()
+           break
+        case'√':
+        case'%':
+          this.specialOpearation(operation)
+            break
+        default:
+          this.otherOperation(operation)
+      }
     },
     handleNumber(number){
         if(this.operation.length==0){
@@ -74,11 +68,12 @@ export default {
           this.lastestValue+=number
         }
     },
-    calculate(type) {
-      const acc = parseInt(this.accumulator);
-      const lastest = parseInt(this.lastestValue);
+    calculate(operation) {
+      const acc = parseFloat(this.accumulator);
+      const lastest = parseFloat(this.lastestValue);
+      this.lastestValue=''
       this.operation.shift()
-      switch (type) {
+      switch (operation) {
         case "+":
           return acc + lastest;
         case "-":
@@ -90,11 +85,18 @@ export default {
         case "%":
           return acc / 100;
         case "√":
-           return  Math.sqrt(acc)
+           return Math.sqrt(acc)
         default:
           return;
       }
       
+    },
+    otherOperation(operation){
+          this.operation.push(operation)
+          this.showdisplay+=operation
+          if(this.operation.length>1){
+              this.accumulator=this.calculate(this.operation[0])
+            }
     },
     clear(){
         this.showdisplay = "";
@@ -102,11 +104,15 @@ export default {
         this.lastestValue = "";
         this.operation = [];
     },
-    specialOpearation(value){
-      if(this.lastestValue!=""){
+    equal(){
+        this.accumulator = this.calculate(this.operation[0]);
+        this.showdisplay = `${this.accumulator}`;
+    },
+    specialOpearation(operation){
+      if(this.lastestValue!=""||this.accumulator==""){
           this.showdisplay='ERROR'
         }else{
-          this.accumulator = this.calculate(value);
+          this.accumulator = this.calculate(operation);
           this.showdisplay = `${this.accumulator}`;
     }
     }

@@ -41,7 +41,7 @@ export default {
         {button:3,append:this.appendNumber},
         {button:"+",append:this.appendOperation},
         {button:0,append:this.appendNumber},
-        {button:".",append:this.appendOperation},
+        {button:".",append:this.appendNumber},
         {button:"=",append:this.appendOperation},
       ],
     };
